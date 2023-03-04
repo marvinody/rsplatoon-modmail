@@ -23,15 +23,17 @@ import random
 import nextcord
 
 import objects
+from dotenv import load_dotenv
 
+load_dotenv()
 
 bot = nextcord.Client(intents=nextcord.Intents.all(), status=nextcord.Status.online,
                       activity=nextcord.Activity(name="for DMs to forward", type=nextcord.ActivityType.watching))
 
 
-home_server_id = os.environ["GUILD"]
+home_server_id = int(os.environ["GUILD"])
 home_server: nextcord.Guild
-home_channel_id = os.environ["CHANNEL"]
+home_channel_id = int(os.environ["CHANNEL"])
 home_channel: nextcord.TextChannel
 
 mod_name = os.environ["NAME"]
@@ -397,7 +399,7 @@ async def on_thread_update(before: nextcord.Thread, after: nextcord.Thread):
         user = bot.get_user(target)
         await user.send("Your ModMail thread has been closed. "
                         "Attempting to send another message will create a new thread.\n"
-                        "Thank you for using /r/Splatoon ModMail.")
+                        "Thank you for using FuModMail.")
 
 
 # Now I just need to do the slash commands.
@@ -428,7 +430,7 @@ async def close_command(it: nextcord.Interaction):
 
     await objects.save_user_threads(it.user.id, flags=f)
     await thread.send("The user has closed this thread using the /close command. No more messages will be shared.")
-    await it.response.send_message("Your thread has been closed. Thank you for using /r/Splatoon ModMail.")
+    await it.response.send_message("Your thread has been closed. Thank you for using FuModMail.")
 
 
 @bot.slash_command(name="block", description="Blocks a user from opening new ModMail threads.",
